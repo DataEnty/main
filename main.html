@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            background-color: #fff3e0;
+        }
+        .sidebar {
+            width: 60px;
+            background: #ff9800;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+        .sidebar:hover {
+            width: 200px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 10px;
+        }
+        .sidebar ul li {
+            padding: 15px;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s;
+        }
+        .sidebar ul li:hover {
+            background: #e68900;
+        }
+        .logout {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .logout a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            background: #d84315;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .logout a:hover {
+            background: #bf360c;
+        }
+        .content {
+            margin-left: 60px;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .header {
+            background: #ffcc80;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .username {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul>
+            <li><a href="https://dataenty.github.io/Data/entry.html">📝 دخول البيانات</a></li>
+            <li><a href="https://dataenty.github.io/users/users.html">👥 ملخص المستخدمين</a></li>
+            <li><a href="https://dataenty.github.io/Acrhive/Archive.html">📂 الأرشيف</a></li>
+        </ul>
+        <div class="logout">
+            <a href="#">🔓 تسجيل خروج</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div>مرحبًا بك في الصفحة الرئيسية</div>
+            <div class="username">مرحبًا، [اسم المستخدم]</div>
+        </div>
+        <p>اختر أحد الأقسام من القائمة الجانبية.</p>
+    </div>
+</body>
+</html>
