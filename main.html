@@ -23,25 +23,44 @@
             position: fixed;
             transition: width 0.3s;
             overflow: hidden;
+            padding-top: 10px;
         }
-        .sidebar:hover {
+        .sidebar.expanded {
             width: 200px;
         }
         .sidebar ul {
             list-style: none;
-            padding: 10px;
+            padding: 0;
         }
         .sidebar ul li {
             padding: 15px;
-        }
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
             transition: background 0.3s;
         }
         .sidebar ul li:hover {
             background: #e68900;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .sidebar ul li i {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+        .sidebar ul li span {
+            display: none;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        .sidebar.expanded ul li span {
+            display: inline;
         }
         .logout {
             position: absolute;
@@ -53,7 +72,9 @@
             color: white;
             font-weight: bold;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 10px;
             background: #d84315;
             border-radius: 5px;
@@ -67,36 +88,44 @@
             padding: 20px;
             width: 100%;
             text-align: center;
+            transition: margin-left 0.3s;
+        }
+        .content.expanded {
+            margin-left: 200px;
         }
         .header {
             background: #ffcc80;
             padding: 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             font-weight: bold;
             border-radius: 5px;
         }
-        .username {
-            text-align: left;
-        }
     </style>
+    <script>
+        function toggleSidebar() {
+            let sidebar = document.querySelector(".sidebar");
+            let content = document.querySelector(".content");
+            sidebar.classList.toggle("expanded");
+            content.classList.toggle("expanded");
+        }
+    </script>
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar" onclick="toggleSidebar()">
         <ul>
-            <li><a href="https://dataenty.github.io/Data/entry.html">📝 دخول البيانات</a></li>
-            <li><a href="https://dataenty.github.io/users/users.html">👥 ملخص المستخدمين</a></li>
-            <li><a href="https://dataenty.github.io/Acrhive/Archive.html">📂 الأرشيف</a></li>
-            <li><a href="https://dataenty.github.io/members/members.html">🏢 إدارة العمال</a></li>
+            <li><a href="https://dataenty.github.io/Data/entry.html"><i>📝</i> <span>دخول البيانات</span></a></li>
+            <li><a href="https://dataenty.github.io/users/users.html"><i>👥</i> <span>ملخص المستخدمين</span></a></li>
+            <li><a href="https://dataenty.github.io/Acrhive/Archive.html"><i>📂</i> <span>الأرشيف</span></a></li>
+            <li><a href="https://dataenty.github.io/members/members.html"><i>🏢</i> <span>إدارة العمال</span></a></li>
         </ul>
         <div class="logout">
-            <a href="#">🔓 تسجيل خروج</a>
+            <a href="#"><i>🔓</i> <span>تسجيل خروج</span></a>
         </div>
     </div>
     <div class="content">
         <div class="header">
-            <div>مرحبًا بك في الصفحة الرئيسية</div>
             <div class="username">مرحبًا، [اسم المستخدم]</div>
         </div>
         <p>اختر أحد الأقسام من القائمة الجانبية.</p>
