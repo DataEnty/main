@@ -8,6 +8,7 @@
         // استيراد Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
         // إعداد Firebase
         const firebaseConfig = {
@@ -23,11 +24,20 @@
         // تهيئة Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getDatabase(app);
 
         // التحقق من تسجيل دخول المستخدم وعرض اسمه
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                document.getElementById("username").innerText = `مرحبًا، ${user.email}`;
+                // البحث عن اسم المستخدم في قاعدة البيانات
+                const userRef = ref(db, "allowedUsers/" + btoa(user.email));
+                get(userRef).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        document.getElementById("username").innerText = `مرحبًا، ${snapshot.val().name}`;
+                    } else {
+                        document.getElementById("username").innerText = "مرحبًا، مستخدم غير معروف";
+                    }
+                });
             } else {
                 window.location.href = "https://dataenty.github.io/sign-in-/sign.html"; // إعادة التوجيه إذا لم يكن مسجلًا
             }
@@ -44,61 +54,66 @@
     </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { display: flex; background-color: #f5f5f5; }
+        body { display: flex; flex-direction: column; background-color: #f5f5f5; height: 100vh; }
+        .header {
+            background: #ff9800; padding: 15px; display: flex;
+            justify-content: space-between; align-items: center;
+            font-weight: bold; color: white;
+            width: 100%; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logout button {
+            background: #d84315; color: white; border: none;
+            padding: 10px 15px; border-radius: 5px; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .logout button:hover { background: #bf360c; }
+        .container { display: flex; flex: 1; }
         .sidebar {
-            width: 60px; background: #ff9800; color: white; height: 100vh;
-            position: fixed; transition: width 0.3s; overflow: hidden; padding-top: 10px;
+            width: 60px; background: #ff9800; color: white;
+            height: 100%; position: fixed; transition: width 0.3s;
+            overflow: hidden; padding-top: 10px;
         }
         .sidebar.expanded { width: 200px; }
         .sidebar ul { list-style: none; padding: 0; }
         .sidebar ul li {
-            padding: 15px; display: flex; align-items: center; cursor: pointer; transition: background 0.3s;
+            padding: 15px; display: flex; align-items: center;
+            cursor: pointer; transition: background 0.3s;
         }
         .sidebar ul li:hover { background: #e68900; }
         .sidebar ul li a {
-            color: white; text-decoration: none; display: flex; align-items: center; width: 100%;
+            color: white; text-decoration: none; display: flex;
+            align-items: center; width: 100%;
         }
         .sidebar ul li i { font-size: 20px; width: 30px; text-align: center; }
         .sidebar ul li span { display: none; margin-right: 10px; white-space: nowrap; }
         .sidebar.expanded ul li span { display: inline; }
-        .logout {
-            position: absolute; bottom: 20px; width: 100%; text-align: center;
-        }
-        .logout button {
-            color: white; font-weight: bold; background: #d84315;
-            border: none; padding: 10px; border-radius: 5px;
-            cursor: pointer; width: 90%;
-            transition: background 0.3s;
-        }
-        .logout button:hover { background: #bf360c; }
         .content {
-            margin-left: 60px; padding: 20px; width: 100%; text-align: center; transition: margin-left 0.3s;
+            margin-left: 60px; padding: 20px; width: 100%;
+            text-align: center; transition: margin-left 0.3s;
         }
         .content.expanded { margin-left: 200px; }
-        .header {
-            background: #ffcc80; padding: 15px; display: flex;
-            justify-content: flex-end; align-items: center;
-            font-weight: bold; border-radius: 5px;
-        }
     </style>
 </head>
 <body>
-    <div class="sidebar" onclick="toggleSidebar()">
-        <ul>
-            <li><a href="https://dataenty.github.io/Data/entry.html"><i>📝</i> <span>دخول البيانات</span></a></li>
-            <li><a href="https://dataenty.github.io/users/users.html"><i>👥</i> <span>ملخص المستخدمين</span></a></li>
-            <li><a href="https://dataenty.github.io/Acrhive/Archive.html"><i>📂</i> <span>الأرشيف</span></a></li>
-            <li><a href="https://dataenty.github.io/members/members.html"><i>🏢</i> <span>إدارة العمال</span></a></li>
-        </ul>
+    <div class="header">
+        <div id="username">جارٍ تحميل المستخدم...</div>
         <div class="logout">
             <button onclick="logoutUser()">🔓 تسجيل خروج</button>
         </div>
     </div>
-    <div class="content">
-        <div class="header">
-            <div id="username">جارٍ تحميل المستخدم...</div>
+
+    <div class="container">
+        <div class="sidebar" onclick="toggleSidebar()">
+            <ul>
+                <li><a href="https://dataenty.github.io/Data/entry.html"><i>📝</i> <span>دخول البيانات</span></a></li>
+                <li><a href="https://dataenty.github.io/users/users.html"><i>👥</i> <span>ملخص المستخدمين</span></a></li>
+                <li><a href="https://dataenty.github.io/Acrhive/Archive.html"><i>📂</i> <span>الأرشيف</span></a></li>
+                <li><a href="https://dataenty.github.io/members/members.html"><i>🏢</i> <span>إدارة العمال</span></a></li>
+            </ul>
         </div>
-        <p>اختر أحد الأقسام من القائمة الجانبية.</p>
+        <div class="content">
+            <p>اختر أحد الأقسام من القائمة الجانبية.</p>
+        </div>
     </div>
 
     <script>
